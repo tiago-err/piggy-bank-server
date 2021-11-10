@@ -1,10 +1,9 @@
 interface responseType {
-	status: boolean,
-	message: string,
-	package?: Record<string, any>,
-	payload?: Record<string, any>
+	status: boolean;
+	message: string;
+	package?: Record<string, any>;
+	payload?: Record<string, any>;
 }
-
 
 /**
  *
@@ -13,12 +12,12 @@ interface responseType {
  * @returns {{package, message, status: boolean}}
  */
 const successResponse = (message: string, payload: Record<string, any>): responseType => {
-    return {
-        status: true,
-        message: message,
-        package: payload
-    }
-}
+	return {
+		status: true,
+		message: message,
+		package: payload,
+	};
+};
 
 /**
  *
@@ -27,30 +26,25 @@ const successResponse = (message: string, payload: Record<string, any>): respons
  * @returns {{message, status: boolean}}
  */
 const failResponse = (message: string, payload?: Record<string, any>): responseType => {
-    let response: responseType = {
-        status: false,
-        message: message,
-    }
+	let response: responseType = {
+		status: false,
+		message: message,
+	};
 
-    if (payload) {
-        response.payload = payload
-    }
+	if (payload) {
+		response.payload = payload;
+	}
 
-    return response
-}
+	return response;
+};
 
 /**
  *
  * @type {{message: string, status: boolean}}
  */
 const notFountResponse: responseType = {
-    status: false,
-    message: 'Unable to find the requested resource!',
-}
+	status: false,
+	message: "Unable to find the requested resource!",
+};
 
-
-export {
-	successResponse,
-	failResponse,
-	notFountResponse
-}
+export {successResponse, failResponse, notFountResponse};

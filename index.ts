@@ -1,16 +1,16 @@
-require('dotenv').config()
-import errorMiddleware from './middlewares/error.middleware'
+require("dotenv").config();
+import errorMiddleware from "./middlewares/error.middleware";
 
-import express from 'express'
-import {api} from './routes/api'
+import express from "express";
+import {api} from "./routes/api";
 
-const app = express()
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
-api(app)
+api(app);
 
 // Error Handler Middleware
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
-export default app
+export default app;
