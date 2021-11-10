@@ -10,14 +10,20 @@ const db = {};
 
 let sequelize;
 if (config.use_env_variable) {
-	sequelize = new Sequelize(process.env[config.use_env_variable], config);
+	const env_variables = process.env[config.use_env_variable];
+	sequelize = new Sequelize(
+		process.env[env_variables.database],
+		process.env[env_variables.username],
+		process.env[env_variables.password],
+		Object.assign(config, {host: process.env[env_variables.host]}),
+	);
 } else {
 	sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 fs.readdirSync(__dirname)
 	.filter((file) => {
-		return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js";
+		return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".ts";
 	})
 	.forEach((file) => {
 		const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
