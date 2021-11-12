@@ -9,8 +9,11 @@ const config = require(__dirname + "/../config/config.json")[env];
 const db = {};
 
 let sequelize;
+
 if (config.use_env_variable) {
-	const env_variables = process.env[config.use_env_variable];
+	console.log(`\n📄 [DATABASE] - Using environment variables!`);
+
+	const env_variables = config.use_env_variable;
 	sequelize = new Sequelize(
 		process.env[env_variables.database],
 		process.env[env_variables.username],
@@ -18,12 +21,13 @@ if (config.use_env_variable) {
 		Object.assign(config, {host: process.env[env_variables.host]}),
 	);
 } else {
+	console.log(`\n📄 [DATABASE] - Using config variables!`);
 	sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 fs.readdirSync(__dirname)
 	.filter((file) => {
-		return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js";
+		return file.indexOf(".") !== 0 && file !== basename && (file.slice(-3) === ".js" || file.slice(-3) === ".ts");
 	})
 	.forEach((file) => {
 		const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);

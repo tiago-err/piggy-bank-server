@@ -29,7 +29,8 @@
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-validator": "^6.12.2",
-        "mysql2": "^2.3.2",
+        "jsonwebtoken": "^8.5.1",
+        "mariadb": "^2.5.5",
         "nodemon": "^2.0.13",
         "rimraf": "^3.0.2",
         "sequelize": "^6.9.0",
@@ -43,12 +44,10 @@
         "server",
         "node server"
     ],
-    "bin": {
-        "create-express-boilerplate": "bin/installer.js"
-    },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",
         "@types/jest": "^27.0.2",
+        "@types/jsonwebtoken": "^8.5.5",
         "@types/sequelize": "^4.28.10",
         "@types/supertest": "^2.0.11",
         "husky": "^7.0.0",

@@ -1,9 +1,10 @@
-import {DataTypes, Sequelize} from "sequelize";
 import bcrypt from "bcrypt";
+import {Sequelize, DataTypes, Model} from "sequelize";
 
-module.exports = (sequelize, dataTypes) => {
-	return sequelize.define(
-		"User",
+class User extends Model {}
+
+module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
+	User.init(
 		{
 			firstName: {
 				type: dataTypes.STRING,
@@ -27,17 +28,18 @@ module.exports = (sequelize, dataTypes) => {
 			},
 		},
 		{
+			sequelize,
+			modelName: "User",
 			hooks: {
-				beforeCreate: (user) => {
+				beforeCreate: (user: any, options) => {
 					if (user.password) user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8));
 				},
-				beforeUpdate: (user) => {
+				beforeUpdate: (user: any) => {
 					if (user.password) user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8));
 				},
-			},
-			instanceMethods: {
-				validPassword: (password) => bcrypt.compareSync(password, this.password),
 			},
 		},
 	);
+
+	return User;
 };
