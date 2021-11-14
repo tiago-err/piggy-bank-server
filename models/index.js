@@ -29,9 +29,11 @@ fs.readdirSync(__dirname)
 	.filter((file) => {
 		return file.indexOf(".") !== 0 && file !== basename && (file.slice(-3) === ".js" || file.slice(-3) === ".ts");
 	})
-	.forEach((file) => {
-		const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-		db[model.name] = model;
+	.map((file) => require(path.join(__dirname, file)))
+	.sort((modelA, modelB) => modelA.order - modelB.order)
+	.forEach((model) => {
+		const instantiatedModel = model.init(sequelize, Sequelize.DataTypes);
+		db[instantiatedModel.name] = instantiatedModel;
 	});
 
 Object.keys(db).forEach((modelName) => {

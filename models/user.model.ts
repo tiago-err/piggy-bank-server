@@ -3,7 +3,7 @@ import {Sequelize, DataTypes, Model} from "sequelize";
 
 class User extends Model {}
 
-module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
+function init(sequelize: Sequelize, dataTypes: typeof DataTypes) {
 	User.init(
 		{
 			firstName: {
@@ -42,4 +42,6 @@ module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
 	);
 
 	return User;
-};
+}
+
+module.exports = {init, User, order: 0};
