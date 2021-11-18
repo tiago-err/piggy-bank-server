@@ -1,10 +1,10 @@
 import {Sequelize, DataTypes, Model} from "sequelize";
 
 const User = require("./user.model").User;
-class Bank extends Model {}
+class Category extends Model {}
 
 function init(sequelize: Sequelize, dataTypes: typeof DataTypes) {
-	Bank.init(
+	Category.init(
 		{
 			name: {
 				type: dataTypes.STRING,
@@ -16,12 +16,12 @@ function init(sequelize: Sequelize, dataTypes: typeof DataTypes) {
 		},
 		{
 			sequelize,
-			modelName: "Bank",
+			modelName: "Category",
 		},
 	);
 
-	Bank.belongsTo(User);
-	return Bank;
+	Category.hasOne(User);
+	return Category;
 }
 
-module.exports = {init, Bank, order: 1};
+module.exports = {init, Category, order: 1};

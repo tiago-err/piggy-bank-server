@@ -11,29 +11,31 @@ import authMiddleware from "../middlewares/auth.middleware";
  * @param app
  */
 export const api = (app: Express) => {
-	app.get("/", IndexController.index);
-	app.post("/", validate(indexValidator), IndexController.indexPost);
-
 	app.get("/banks");
 	app.get("/bank/:id");
 	app.post("/banks");
-	app.put("/banks");
+	app.put("/banks/:id");
 
 	app.get("/subscriptions");
 	app.get("/subscription/:id");
 	app.post("/subscriptions");
-	app.put("/subscriptions");
+	app.put("/subscriptions/:id");
+
+	app.get("/income");
+	app.get("/income/:id");
+	app.post("/income");
+	app.put("/income/:id");
 
 	app.get("/transactions");
 	app.get("/bank/:id/transactions");
 	app.get("/transaction/:id");
 	app.post("/transactions");
-	app.put("/transactions");
+	app.put("/transactions/:id");
 
 	app.get("/categories");
 	app.get("/category/:id");
 	app.post("/categories");
-	app.put("/categories");
+	app.put("/categories/:id");
 
 	app.get("/monthy-balance");
 	app.get("/yearly-balance");
