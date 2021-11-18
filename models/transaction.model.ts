@@ -1,7 +1,6 @@
 import {Sequelize, DataTypes, Model} from "sequelize";
 
 const Bank = require("./bank.model").Bank;
-const Category = require("./category.model").Category;
 class Transaction extends Model {}
 
 function init(sequelize: Sequelize, dataTypes: typeof DataTypes) {
@@ -23,6 +22,10 @@ function init(sequelize: Sequelize, dataTypes: typeof DataTypes) {
 				type: dataTypes.BOOLEAN,
 				allowNull: false,
 			},
+			category: {
+				type: dataTypes.STRING,
+				allowNull: false,
+			},
 		},
 		{
 			sequelize,
@@ -31,7 +34,6 @@ function init(sequelize: Sequelize, dataTypes: typeof DataTypes) {
 	);
 
 	Transaction.belongsTo(Bank);
-	Transaction.belongsTo(Category);
 
 	return Transaction;
 }
