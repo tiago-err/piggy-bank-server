@@ -2,17 +2,9 @@ import {Request, Response} from "express";
 import {failResponse, successResponse} from "../helpers/methods";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import {User} from "../interfaces/user.interface";
 
 const database = require("../models/index.js");
-
-interface User {
-	id?: number;
-	email: string;
-	firstName: string;
-	lastName: string;
-	password: string;
-	gotFromMiddleware?: boolean;
-}
 
 export const login = async (req: Request, res: Response): Promise<void> => {
 	const userBody: {email: string; password: string} = req.body;
@@ -25,6 +17,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 		}
 
 		const responseBody = {
+			id: user.id,
 			email: user.email,
 			firstName: user.firstName,
 			lastName: user.lastName,
@@ -42,30 +35,24 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const get = async (req: Request, res: Response): Promise<void> => {
-	const {user: userBody}: {user: User} = req.body;
+	const {user}: {user: User} = req.body;
 
-	if (!userBody.gotFromMiddleware) {
+	if (!user.gotFromMiddleware) {
 		res.status(400).send(failResponse("Wrong format for this request!"));
 		return;
 	}
 
-	const user: User = await database.User.findOne({where: {email: userBody.email}});
-	if (user) {
-		const responseBody = {
-			email: user.email,
-			firstName: user.firstName,
-			lastName: user.lastName,
-		};
+	const responseBody = {
+		email: user.email,
+		firstName: user.firstName,
+		lastName: user.lastName,
+	};
 
-		res.send(
-			successResponse("User information retrieved successfully!", {
-				user: responseBody,
-			}),
-		);
-		return;
-	}
-
-	res.status(401).send(failResponse("There is no user registered with that e-mail address!"));
+	res.send(
+		successResponse("User information retrieved successfully!", {
+			user: responseBody,
+		}),
+	);
 };
 
 /**
@@ -80,6 +67,7 @@ export const post = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const user: User = await database.User.create(userBody);
 		const responseBody = {
+			id: user.id,
 			email: user.email,
 			firstName: user.firstName,
 			lastName: user.lastName,

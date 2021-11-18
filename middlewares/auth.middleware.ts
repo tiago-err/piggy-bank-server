@@ -1,6 +1,7 @@
 import type {Handler} from "express";
 import jwt from "jsonwebtoken";
 import {failResponse} from "../helpers/methods";
+import {User} from "../interfaces/user.interface";
 
 const database = require("../models/index.js");
 
@@ -12,7 +13,7 @@ const database = require("../models/index.js");
  * @param next
  * @returns {*}
  */
-const authMiddleware: Handler = (req, res, next) => {
+const authMiddleware: Handler = async (req, res, next) => {
 	const {
 		headers: {authorization},
 	} = req;
@@ -21,10 +22,15 @@ const authMiddleware: Handler = (req, res, next) => {
 	const authToken = authorization.split(" ")[1];
 
 	try {
-		const decodedUser = jwt.verify(authToken, process.env.JWT_TOKEN || "");
-		req.body = Object.assign(req.body, {user: Object.assign({gotFromMiddleware: true}, decodedUser)});
+		const decodedUser: User = jwt.verify(authToken, process.env.JWT_TOKEN || "") as User;
+		const {dataValues: user}: {dataValues: User} = await database.User.findOne({where: {email: decodedUser.email}});
 
-		return next();
+		if (user) {
+			req.body = Object.assign(req.body, {user: Object.assign({gotFromMiddleware: true}, user)});
+			return next();
+		}
+
+		res.status(403).send(failResponse("Token does not belong to a valid user!"));
 	} catch (error) {
 		res.status(403).send(failResponse("Token does not belong to a valid user!", error as any));
 	}

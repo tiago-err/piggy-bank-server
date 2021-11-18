@@ -20,7 +20,7 @@ function init(sequelize: Sequelize, dataTypes: typeof DataTypes) {
 		},
 	);
 
-	Category.hasOne(User);
+	Category.belongsTo(User);
 	return Category;
 }
 

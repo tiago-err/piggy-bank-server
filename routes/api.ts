@@ -1,8 +1,7 @@
 import {Express} from "express-serve-static-core";
-import * as IndexController from "../controllers/index.controller";
 import * as UserController from "../controllers/user.controller";
+import * as BankController from "../controllers/bank.controller";
 import {validate} from "../middlewares/validators/wrapper.validator";
-import {indexValidator} from "../middlewares/validators/index.validations";
 import {postUserValidator, loginUserValidator} from "../middlewares/validators/user.validations";
 import authMiddleware from "../middlewares/auth.middleware";
 
@@ -11,9 +10,9 @@ import authMiddleware from "../middlewares/auth.middleware";
  * @param app
  */
 export const api = (app: Express) => {
-	app.get("/banks");
-	app.get("/bank/:id");
-	app.post("/banks");
+	app.get("/banks", authMiddleware, BankController.get);
+	app.get("/bank/:id", authMiddleware, BankController.getById);
+	app.post("/banks", authMiddleware, BankController.post);
 	app.put("/banks/:id");
 
 	app.get("/subscriptions");
